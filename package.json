@@ -1,12 +1,14 @@
 {
   "name": "movie-file-bot",
   "version": "1.0.0",
-  "description": "Telegram bot that returns download link for sent files",
+  "description": "Telegram bot that uploads files to Catbox and returns the link",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
+    "axios": "^1.6.8",
+    "form-data": "^4.0.0",
     "node-telegram-bot-api": "^0.61.0"
   }
 }
