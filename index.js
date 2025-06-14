@@ -4,16 +4,21 @@ const bot = new TelegramBot(token, { polling: true });
 
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
+  let fileId = null;
 
-  if (msg.document) {
-    const fileId = msg.document.file_id;
+  if (msg.document) fileId = msg.document.file_id;
+  else if (msg.video) fileId = msg.video.file_id;
+  else if (msg.audio) fileId = msg.audio.file_id;
+  else if (msg.photo) fileId = msg.photo[msg.photo.length - 1].file_id;
+
+  if (fileId) {
     try {
       const fileLink = await bot.getFileLink(fileId);
-      bot.sendMessage(chatId, `📥 Download link for your file:\n${fileLink}`);
-    } catch (error) {
-      bot.sendMessage(chatId, '❌ Failed to get file link.');
+      bot.sendMessage(chatId, `📥 Download link:\n${fileLink}`);
+    } catch (err) {
+      bot.sendMessage(chatId, '❌ Telegram blocked this file or link error occurred.');
     }
   } else {
-    bot.sendMessage(chatId, "📤 Please send a file (movie/document), and I'll reply with a download link.");
+    bot.sendMessage(chatId, '📤 Please send a file, photo, video or audio.');
   }
 });
